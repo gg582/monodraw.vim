@@ -1,53 +1,42 @@
-" Name:         monodraw-airline
-" Description:  Neutral anchor statusline for monodraw-light/dark
+" Name:         monodraw
+" Description:  8-Layer luminance anchor for Lightline.vim
 " Logic:        Middle-luminance grays to prevent pupillary shock during mode shifts
 
-let g:airline#themes#monodraw#palette = {}
+let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
 
-" ---------------------------------------------------------------------
-" COLOR DEFINITIONS (Neutral Gray Scale)
-" ---------------------------------------------------------------------
-" Neutral Mid-Gray (#525252) / Silver (#cfd3d6) / Dark Charcoal (#161616)
-let s:N1 = [ '#cfd3d6' , '#525252' , 250 , 239 ] " Mode (Normal)
-let s:N2 = [ '#cfd3d6' , '#393939' , 250 , 237 ] " Info
-let s:N3 = [ '#8d8d8d' , '#161616' , 244 , 234 ] " Statusline Base
+" --- Monodraw Palette Calibration ---
+let s:bg      = '#161616' " Dark Charcoal (Gray 100)
+let s:fg      = '#cfd3d6' " Silver Foreground
+let s:gray_m  = '#525252' " Mid-Gray
+let s:gray_d  = '#393939' " Dark-Gray
+let s:blue    = '#0f62fe' " Layer 5: Execution Blue
+let s:magenta = '#d12771' " Layer 4: Flow Magenta
+let s:red     = '#da1e28' " Layer 8: Error Red
+let s:white   = '#f4f4f4' " High Luminance White
 
-" ---------------------------------------------------------------------
-" NORMAL MODE: Structural Stability
-" ---------------------------------------------------------------------
-let g:airline#themes#monodraw#palette.normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3)
+" --- Normal Mode: Structural Stability ---
+let s:p.normal.left    = [ [ s:fg, s:gray_m ], [ s:fg, s:gray_d ] ]
+let s:p.normal.middle  = [ [ s:fg, s:bg ] ]
+let s:p.normal.right   = [ [ s:fg, s:gray_m ], [ s:fg, s:gray_d ] ]
 
-" ---------------------------------------------------------------------
-" INSERT MODE: High Response (Monodraw-Blue/Teal)
-" Uses Layer 5 (Execution) color to signal 'Write' state
-" ---------------------------------------------------------------------
-let s:I1 = [ '#f4f4f4' , '#0f62fe' , 255 , 27  ]
-let s:I2 = [ '#cfd3d6' , '#393939' , 250 , 237 ]
-let s:I3 = [ '#8d8d8d' , '#161616' , 244 , 234 ]
-let g:airline#themes#monodraw#palette.insert = airline#themes#generate_color_map(s:I1, s:I2, s:I3)
+" --- Insert Mode: High Response (Blue) ---
+let s:p.insert.left    = [ [ s:white, s:blue ], [ s:fg, s:gray_d ] ]
 
-" ---------------------------------------------------------------------
-" VISUAL MODE: Attention Shift (Monodraw-Magenta)
-" Uses Layer 4 (Flow) color to signal 'Select' state
-" ---------------------------------------------------------------------
-let s:V1 = [ '#f4f4f4' , '#d12771' , 255 , 161 ]
-let s:V2 = [ '#cfd3d6' , '#393939' , 250 , 237 ]
-let s:V3 = [ '#8d8d8d' , '#161616' , 244 , 234 ]
-let g:airline#themes#monodraw#palette.visual = airline#themes#generate_color_map(s:V1, s:V2, s:V3)
+" --- Visual Mode: Attention Shift (Magenta) ---
+let s:p.visual.left    = [ [ s:white, s:magenta ], [ s:fg, s:gray_d ] ]
 
-" ---------------------------------------------------------------------
-" REPLACE MODE: Critical Alert (Monodraw-Red)
-" Uses Layer 8 (Error) color to signal 'Destructive' state
-" ---------------------------------------------------------------------
-let s:R1 = [ '#f4f4f4' , '#da1e28' , 255 , 160 ]
-let s:R2 = [ '#cfd3d6' , '#393939' , 250 , 237 ]
-let s:R3 = [ '#8d8d8d' , '#161616' , 244 , 234 ]
-let g:airline#themes#monodraw#palette.replace = airline#themes#generate_color_map(s:R1, s:R2, s:R3)
+" --- Replace Mode: Critical Alert (Red) ---
+let s:p.replace.left   = [ [ s:white, s:red ], [ s:fg, s:gray_d ] ]
 
-" ---------------------------------------------------------------------
-" INACTIVE STATE: Absolute Noise Reduction
-" ---------------------------------------------------------------------
-let s:IA1 = [ '#393939' , '#161616' , 237 , 234 ]
-let s:IA2 = [ '#393939' , '#161616' , 237 , 234 ]
-let s:IA3 = [ '#393939' , '#161616' , 237 , 234 ]
-let g:airline#themes#monodraw#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3)
+" --- Inactive: Absolute Noise Reduction ---
+let s:p.inactive.left  = [ [ s:gray_d, s:bg ], [ s:gray_d, s:bg ] ]
+let s:p.inactive.middle = [ [ s:gray_d, s:bg ] ]
+let s:p.inactive.right = [ [ s:gray_d, s:bg ], [ s:gray_d, s:bg ] ]
+
+" --- Tabline ---
+let s:p.tabline.left   = [ [ s:fg, s:gray_d ] ]
+let s:p.tabline.tabsel = [ [ s:bg, s:fg ] ]
+let s:p.tabline.middle = [ [ s:fg, s:bg ] ]
+let s:p.tabline.right  = [ [ s:bg, s:fg ] ]
+
+let g:lightline#colorscheme#monodraw#palette = lightline#colorscheme#fill(s:p)
